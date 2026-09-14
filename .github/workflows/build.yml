@@ -28,9 +28,10 @@ jobs:
           if (-not $found) { throw "Could not find CMakeLists.txt anywhere in the repo." }
           Write-Host "Found CMakeLists.txt at: $($found.DirectoryName)"
           echo "src_dir=$($found.DirectoryName)" >> $env:GITHUB_OUTPUT
-
+      - name: Set up MSVC developer environment
+        uses: ilammy/msvc-dev-cmd@v1
       - name: Configure CMake
-        run: cmake -B build -S "${{ steps.locate.outputs.src_dir }}" -G "Visual Studio 17 2022" -A x64
+        run: cmake -B build -S "${{ steps.locate.outputs.src_dir }}" -G "Ninja Multi-Config"
 
       - name: Build (Release)
         run: cmake --build build --config Release --parallel
