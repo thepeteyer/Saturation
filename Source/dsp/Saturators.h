@@ -67,7 +67,7 @@ namespace neosat::sat
         constexpr float a = 1.8f;   // knee sharpness
         constexpr float s = 1.4f;   // negative-side firmness (s > 1 => harder)
 
-        auto shape = [] (float v) noexcept
+        auto shape = [a, s] (float v) noexcept
         {
             if (v >= 0.0f)
                 return (1.0f - std::exp (-a * v)) / a;
