@@ -1,0 +1,49 @@
+name: Build NeoSat VST3
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:   # lets you trigger a build manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: windows-latest   # comes with MSVC, CMake, Ninja, and Git preinstalled
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Speeds up repeat builds by caching the JUCE source that CMake FetchContent downloads
+      - name: Cache CMake FetchContent deps
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          key: ${{ runner.os }}-juce-deps-${{ hashFiles('CMakeLists.txt') }}
+
+      - name: Locate CMakeLists.txt
+        id: locate
+        shell: pwsh
+        run: |
+          $found = Get-ChildItem -Recurse -Filter CMakeLists.txt | Select-Object -First 1
+          if (-not $found) { throw "Could not find CMakeLists.txt anywhere in the repo." }
+          Write-Host "Found CMakeLists.txt at: $($found.DirectoryName)"
+          echo "src_dir=$($found.DirectoryName)" >> $env:GITHUB_OUTPUT
+
+      - name: Configure CMake
+        run: cmake -B build -S "${{ steps.locate.outputs.src_dir }}" -G "Visual Studio 17 2022" -A x64
+
+      - name: Build (Release)
+        run: cmake --build build --config Release --parallel
+
+      - name: Upload built VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeoSat-VST3
+          path: build/NeoSat_artefacts/Release/VST3/NeoSat.vst3
+
+      - name: Upload standalone app (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeoSat-Standalone
+          path: build/NeoSat_artefacts/Release/Standalone/
+          if-no-files-found: ignore
