@@ -1,0 +1,28 @@
+NeoSat — main window (fixed 8:5 aspect, resizable 520x325 … 1200x750)
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  NEOSAT  saturation                              MODE [ Tube      ▾ ] │  header
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│    ┌───────────────────────────────────┐   ┌──────────────────────┐   │
+│    │   OUTPUT                           │   │ IN / OUT             │   │
+│    │        ╱                           │   │        ╷    ╷╷       │   │
+│    │       ╱   ·<live dot>              │   │   ╷╷  ╷│╷  ╷││╷ ╷     │   │  visualisers
+│    │   ───╱────────────  (curve bows    │   │  ╷││╷╷│││╷╷│││││╷│    │   │
+│    │     ╱  ⌜unity 45° dashed⌝  away    │   │ ─────────────────── 0│   │
+│    │    ╱     from unity = saturation)  │   │                      │   │
+│    │   ╱                        INPUT   │   │                      │   │
+│    └───────────────────────────────────┘   └──────────────────────┘   │
+│                                                                      │
+│      ( • )          ( • )          ( • )          ( • )               │
+│     DRIVE           TONE           MIX           OUTPUT               │  knob row
+│    +12.0 dB        bright          65 %         -2.0 dB               │
+├──────────────────────────────────────────────────────────────────────┤
+│ Turn Drive up and watch the curve bend.   [AUTO GAIN] TONE[Post▾] OS[2x▾] │  footer / hint
+└──────────────────────────────────────────────────────────────────────┘
+
+Glow rules:
+  - knob arc/pointer/bloom brighten + thicken with value; cyan -> lime past ~60%
+  - hover/drag adds a breathing "heat" pulse to that knob
+  - transfer curve glow intensity follows its peak deviation from the unity line
+  - magenta dot rides the curve at the current input level
